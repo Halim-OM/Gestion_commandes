@@ -1,11 +1,18 @@
 <?php
 
 namespace App\Controller;
-use App\Repository\ClientRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Doctrine\ORM\EntityManagerInterface;
+
+use App\Entity\Client;
+use App\Repository\ClientRepository;
+use App\Form\ClientType;
+
 
 final class ClientController extends AbstractController
 {
@@ -26,5 +33,87 @@ final class ClientController extends AbstractController
         }
         return $this->render('client/show.html.twig', ['client' => $client]);
     }
+
+    #[Route('/client/ajouter', name: 'app_client_new', methods: ['GET','POST'])]
+    public function new(Request $request, EntityManagerInterface $em):Response {
+        $client = new Client();
+
+
+        $form = $this->createForm(ClientType::class, $client);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $em->persist($client);
+            $em->flush();
+
+            return $this->redirectToRoute('app_client');
+        }
+
+        return $this->render('client/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/clients/{id}/modifier', name: 'app_client_edit', requirements: ['id' => '\\d+'], methods: ['GET', 'POST'])]
+    public function edit(int $id,
+    ClientRepository $repository,
+    Request $request,
+    EntityManagerInterface $em): Response {
+    $client = $repository->find($id);
+
+    if (!$client) {
+        throw $this->createNotFoundException('Client introuvable');
+    }
+
+    // Le même formulaire, prérempli avec le client existant.
+    $form = $this->createForm(ClientType::class, $client);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em->flush();
+
+        return $this->redirectToRoute('app_client');
+    }
+
+    return $this->render('client/edit.html.twig', [
+        'form' => $form->createView(),
+        'client' => $client,
+    ]);
+    }
+
+
+    #[Route('/clients/{id}/supprimer', name: 'app_client_delete', requirements: ['id' => '\\d+'], methods: ['POST'])]
+    public function delete(int $id, ClientRepository $repository, Request $request, EntityManagerInterface $em): Response {
+    
+    $client = $repository->find($id);
+
+    if (!$client) {
+        throw $this->createNotFoundException('Client introuvable');
+    }
+
+    if (!$this->isCsrfTokenValid(
+        'delete_client_'.$client->getId(),
+        $request->request->get('_token')
+    )) {
+        throw $this->createAccessDeniedException('Jeton invalide');
+    }
+
+    if (!$client->getCommandes()->isEmpty()) {
+        $this->addFlash(
+            'error',
+            'Impossible de supprimer un client ayant des commandes.'
+        );
+
+        return $this->redirectToRoute('app_client');
+    }
+
+    $em->remove($client);
+    $em->flush();
+
+    $this->addFlash('success', 'Client supprimé.');
+
+    return $this->redirectToRoute('app_client');
+}
+
 }
 

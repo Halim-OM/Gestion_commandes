@@ -27,5 +27,11 @@
 
     {% endfor %}
 
+    <a href="{{ path('app_client_edit', {id: client.id}) }} ">Modifier </a>
+    <form method="post" action="{{ path('app_client_delete', {id: client.id}) }}" onsubmit="return confirm('Supprimer ce client ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete_client_' ~ client.id) }}">
+        <button type="submit">Supprimer</button>
+    </form>
+
 </div>
 {% endblock %}

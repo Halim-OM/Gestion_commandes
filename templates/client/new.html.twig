@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un nouveau Client{% endblock %}
+
+{% block body %}
+
+    <h1> Ajouter un nouveau client </h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="Submit">Enregistrer</button>
+    {{ form_end(form) }}
+
+
+    <a href="{{ path('app_client') }}"> Retour à la liste </a>
+
+
+{% endblock %} 

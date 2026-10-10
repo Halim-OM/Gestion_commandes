@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ClientController!{% endblock %}
+{% block title %}Client Index{% endblock %}
 
 {% block body %}
 <style>
@@ -9,12 +9,28 @@
 </style>
 
 <div class="example-wrapper">
+
+    {% for message in app.flashes('error') %}
+        <p>{{ message }}</p>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <p>{{ message }}</p>
+    {% endfor %}
+    
+    
     <h1>Liste des clients</h1>
+
+    <a href="{{ path('app_client_new') }}">Ajouter un client</a>
 
     {% for client in clients %}
         <p> {{ client.nom }} {{ client.prenom }} - {{ client.email }} -
 
-        <a href="{{ path('app_client_show', {id: client.id}) }}"> détails client </a>
+            <a href="{{ path('app_client_show', {id: client.id}) }}"> détails client </a>    
+            <form method="post" action="{{ path('app_client_delete', {id: client.id}) }}" onsubmit="return confirm('Supprimer ce client ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_client_' ~ client.id) }}">
+            <button type="submit">Supprimer</button>
+            </form>
         
         </p>
 
