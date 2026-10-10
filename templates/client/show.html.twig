@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Show Client!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    
+    <h1>Détails du client</h1>
+
+    <p> {{ client.nom }} {{ client.prenom }} - {{ client.email }} </p>
+    <p> {{ client.telephone }}  </p>
+
+    {% for commande in client.commandes %}
+
+        <p>
+            {{ commande.numero }} - {{ commande.date|date('d/m/Y') }} -- {{ commande.statut }}
+        </p>
+
+    {% else %}
+
+        <p> Aucune commande. </p>
+
+    {% endfor %}
+
+</div>
+{% endblock %}
