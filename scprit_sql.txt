@@ -1,0 +1,29 @@
+CREATE USER 'symfony'@'127.0.0.1'
+IDENTIFIED BY 'ProjetWeb2026!';
+
+GRANT ALL PRIVILEGES ON gestion_commandes.*
+TO 'symfony'@'127.0.0.1';
+
+FLUSH PRIVILEGES;
+
+EXIT;
+
+
+-- Ajout des clients 
+
+INSERT INTO client (nom, prenom, email, telephone) VALUES
+('Martin', 'Lea', 'lea@example.test', '0600000001'),
+('Durand', 'Sami', 'sami@example.test', '0600000002');
+
+
+
+--Ajout des produits 
+
+INSERT INTO produit (reference, nom, description, date, prix, stock)
+VALUES
+('CL001', 'Clavier', 'Clavier USB', NOW(), 25.00, 10),
+('EC001', 'Ecran', 'Ecran 24 pouces', NOW(), 150.00, 2),
+('SO001', 'Souris', 'Souris USB', NOW(), 12.00, 0);
+
+
+

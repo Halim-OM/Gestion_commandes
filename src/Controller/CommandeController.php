@@ -59,6 +59,7 @@ final class CommandeController extends AbstractController
     
         $commande = new Commande();
         $commande->setTotal(0);
+        $commande->setDate(new \DateTimeImmutable());
 
 
         $form = $this->createForm(CommandeType::class, $commande);
