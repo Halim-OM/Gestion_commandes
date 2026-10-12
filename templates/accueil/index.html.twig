@@ -9,6 +9,11 @@
 </style>
 
 <div class="example-wrapper">
+
+    {% for message in app.flashes('error') %}
+        <p style='color:red'>{{ message }}</p>
+    {% endfor %}
+
     <h1>Bonjour, bienvenue sur l'application gestion_commandes ✅</h1>
 
     <a href="{{ path('app_client') }}">Clients</a> <br>

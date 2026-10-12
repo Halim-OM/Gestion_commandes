@@ -4,13 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Gestion des commandes{% endblock %}</title>
+
+    <style>
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .auth-link {
+            margin-left: auto;
+        }
+    </style>
+    
 </head>
 <body>
     <nav>
-        <a href="{{ path('app_accueil') }}">Accueil</a>
-        <a href="{{ path('app_client') }}">Clients</a>
-        <a href="{{ path('app_produit') }}">Produits</a>
-        <a href="{{ path('app_commande') }}">commande</a>
+        <a href="{{ path('app_accueil') }}">Accueil</a> &nbsp
+        <a href="{{ path('app_client') }}">Clients</a>&nbsp
+        <a href="{{ path('app_produit') }}">Produits</a>&nbsp
+        <a href="{{ path('app_commande') }}">commande</a>&nbsp
+
+        {% if app.user %}
+            <a class="auth-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+        {% else %}
+            <a class="auth-link" href="{{ path('app_register') }}">S'inscrire</a> &nbsp&nbsp
+            <a  href="{{ path('app_login') }}">Se connecter</a>
+        {% endif %}
+
     </nav>
 
     <main>

@@ -19,6 +19,11 @@ final class ClientController extends AbstractController
     #[Route('/client', name: 'app_client')]
     public function index(ClientRepository $repo): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page');
+            return $this->redirectToRoute('app_accueil');
+        }
+        
         return $this->render('client/index.html.twig', [
             'clients' => $repo->findAll(),
         ]);
@@ -27,6 +32,11 @@ final class ClientController extends AbstractController
     #[Route('/client/{id}', name: 'app_client_show', requirements:['id'=>'\\d+'], methods: ['GET'] )]
     public function show(int $id, ClientRepository $repo):Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page');
+            return $this->redirectToRoute('app_accueil');
+        }
+
         $client = $repo->find($id);
         if(!$client) {
             throw $this->createNotFoundException('Client introuvable');
@@ -36,8 +46,13 @@ final class ClientController extends AbstractController
 
     #[Route('/client/ajouter', name: 'app_client_new', methods: ['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $em):Response {
+        
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page');
+            return $this->redirectToRoute('app_accueil');
+        }
+    
         $client = new Client();
-
 
         $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
@@ -59,8 +74,13 @@ final class ClientController extends AbstractController
     ClientRepository $repository,
     Request $request,
     EntityManagerInterface $em): Response {
+    
+    if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page');
+            return $this->redirectToRoute('app_accueil');
+    }
+    
     $client = $repository->find($id);
-
     if (!$client) {
         throw $this->createNotFoundException('Client introuvable');
     }
@@ -84,6 +104,11 @@ final class ClientController extends AbstractController
 
     #[Route('/clients/{id}/supprimer', name: 'app_client_delete', requirements: ['id' => '\\d+'], methods: ['POST'])]
     public function delete(int $id, ClientRepository $repository, Request $request, EntityManagerInterface $em): Response {
+    
+    if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page.');
+            return $this->redirectToRoute('app_accueil');
+    }
     
     $client = $repository->find($id);
 

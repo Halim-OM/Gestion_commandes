@@ -22,6 +22,11 @@ final class CommandeController extends AbstractController
     #[Route('/commande', name: 'app_commande')]
     public function index(CommandeRepository $repo): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page');
+            return $this->redirectToRoute('app_login');
+        }
+
         return $this->render('commande/index.html.twig', [
             'commandes' => $repo->findAll(),
         ]);
@@ -31,6 +36,11 @@ final class CommandeController extends AbstractController
     #[Route('/commande/{id}', name: 'app_commande_show', requirements:['id'=>'\\d+'], methods:['GET'])]
     public function show(int $id, CommandeRepository $repo):Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page.');
+            return $this->redirectToRoute('app_login');
+        }
+
         $commande = $repo->find($id);
         if(!$commande){
             throw $this->createNotFoundException('client introuvable');
@@ -41,6 +51,12 @@ final class CommandeController extends AbstractController
 
     #[Route('/commande/ajouter', name: 'app_commande_new', methods: ['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $em):Response {
+        
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page');
+            return $this->redirectToRoute('app_login');
+        }
+    
         $commande = new Commande();
         $commande->setTotal(0);
 
@@ -62,6 +78,11 @@ final class CommandeController extends AbstractController
     #[Route('/commandes/{id}/lignes/ajouter', name: 'app_commande_ligne_new', requirements: ['id' => '\\d+'], methods: ['GET', 'POST'])]
     public function ajouterLigne(int $id, CommandeRepository $repository, Request $request, EntityManagerInterface $em): Response {
     
+    if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Seul admin pourra consulter cette page');
+            return $this->redirectToRoute('app_login');
+    }
+
     $commande = $repository->find($id);
 
     if (!$commande) {
