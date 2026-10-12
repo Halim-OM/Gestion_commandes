@@ -12,13 +12,23 @@
     
     <h1>Détails du client</h1>
 
-    <p> {{ client.nom }} {{ client.prenom }} - {{ client.email }} </p>
-    <p> {{ client.telephone }}  </p>
+    <p> Nom : {{ client.nom }} {{ client.prenom }} - Email : {{ client.email }} </p>
+    <p> Téléphone : {{ client.telephone }}  </p>
+
+    
+    <a href="{{ path('app_client_edit', {id: client.id}) }} ">Modifier </a>
+    <form method="post" action="{{ path('app_client_delete', {id: client.id}) }}" onsubmit="return confirm('Supprimer ce client ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete_client_' ~ client.id) }}">
+        <button type="submit">Supprimer</button>
+    </form>
+    
+    
+    <p><b>Commandes passées :</b></p>
 
     {% for commande in client.commandes %}
 
         <p>
-            {{ commande.numero }} - {{ commande.date|date('d/m/Y') }} -- {{ commande.statut }}
+            {{ commande.numero }} - {{ commande.date|date('d/m/Y') }} -- {{ commande.statut }} -- <a href="{{ path('app_commande_show', {id: commande.id}) }} ">détails </a>
         </p>
 
     {% else %}
@@ -27,11 +37,7 @@
 
     {% endfor %}
 
-    <a href="{{ path('app_client_edit', {id: client.id}) }} ">Modifier </a>
-    <form method="post" action="{{ path('app_client_delete', {id: client.id}) }}" onsubmit="return confirm('Supprimer ce client ?');">
-        <input type="hidden" name="_token" value="{{ csrf_token('delete_client_' ~ client.id) }}">
-        <button type="submit">Supprimer</button>
-    </form>
+    
 
 </div>
 {% endblock %}

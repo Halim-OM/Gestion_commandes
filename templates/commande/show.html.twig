@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CommandeController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Détails de la commande </h1>
+
+    
+    <p><b>Id Commande :</b> {{ commande.id }}</p>
+    <p><b>Client :</b> <a href="{{ path('app_client_show', {'id': commande.client.id}) }}"> {{ commande.client.nom }} -- {{ commande.client.prenom }} </a> -- {{ commande.client.email }}</p>
+    
+    <p><b> Lignes :</b></p>
+    
+    {% for ligneCommande in commande.ligneCommandes %}
+
+        <p> 
+           <a href="{{ path('app_produit_show', {'id': ligneCommande.produit.id}) }}"> {{ ligneCommande.produit.nom }} </a> -- Prix : {{ ligneCommande.prixUnitaire }} -- Quantité : {{ ligneCommande.quantite }} -- Montant : {{ ligneCommande.montant }}
+        </p>
+
+    {% else %}
+        
+        <p>Aucune ligne de commande</p>
+        
+    {% endfor %}
+
+    <b>total : {{ commande.total }}</b> <br><br>
+
+    <a href="{{ path('app_commande_ligne_new', {id:commande.id}) }}">Créer une nouvelle ligne</a>
+    
+</div>
+{% endblock %}

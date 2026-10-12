@@ -95,6 +95,7 @@ final class ClientController extends AbstractController
         'delete_client_'.$client->getId(),
         $request->request->get('_token')
     )) {
+        
         throw $this->createAccessDeniedException('Jeton invalide');
     }
 

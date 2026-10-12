@@ -11,11 +11,7 @@
 <div class="example-wrapper">
 
     {% for message in app.flashes('error') %}
-        <p>{{ message }}</p>
-    {% endfor %}
-
-    {% for message in app.flashes('success') %}
-        <p>{{ message }}</p>
+        <p style='color:red'>{{ message }}</p>
     {% endfor %}
     
     

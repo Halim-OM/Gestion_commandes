@@ -9,12 +9,22 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Liste des commandes</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/vboxuser/Bureau/gestion_commandes/src/Controller/CommandeController.php</code></li>
-        <li>Your template at <code>/home/vboxuser/Bureau/gestion_commandes/templates/commande/index.html.twig</code></li>
-    </ul>
+    {% for commande in commandes %}
+
+        <p> 
+            {{ commande.numero }} -- {{ commande.statut }} 
+           <a href="{{ path('app_commande_show', {id: commande.id}) }}"> détails</a>   
+        </p>
+
+    {% else %}
+
+        <p>Aucune commande</p>
+
+    {% endfor %}
+
+    <a href="{{ path('app_commande_new') }}">Créer une nouvelle commande</a>
+
 </div>
 {% endblock %}

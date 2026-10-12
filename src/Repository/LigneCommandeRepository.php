@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\LigneCommande;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @extends ServiceEntityRepository<LigneCommande>
